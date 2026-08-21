@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
@@ -21,24 +21,62 @@ import {
   Lock,
   Download,
 } from "lucide-react";
-import { INITIAL_CUSTOMERS, INITIAL_LOANS, INITIAL_TRANSACTIONS } from "@/lib/data/mockData";
 import styles from "./customerProfile.module.css";
 
 export default function CustomerProfilePage() {
   const params = useParams();
-  const customerId = (params.id as string) || "cust-0128";
+  const customerId = params.id as string;
 
-  const customer =
-    INITIAL_CUSTOMERS.find((c) => c.id === customerId) || INITIAL_CUSTOMERS[0];
-  const customerLoans = INITIAL_LOANS.filter((l) => l.customerId === customer.id);
-  const customerTxns = INITIAL_TRANSACTIONS.filter((t) => t.customerId === customer.id);
-
+  const [customer, setCustomer] = useState<any | null>(null);
+  const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<"loans" | "ledger" | "documents">("loans");
 
+  useEffect(() => {
+    fetch("/api/customers")
+      .then((res) => res.json())
+      .then((json) => {
+        if (json.success && Array.isArray(json.data)) {
+          const found = json.data.find((c: any) => c.id === customerId);
+          if (found) setCustomer(found);
+        }
+      })
+      .catch((err) => console.error("Error loading customer profile:", err))
+      .finally(() => setLoading(false));
+  }, [customerId]);
+
+  if (loading) {
+    return (
+      <DashboardLayout title="Member Profile" userName="Admin User" userRole="ADMIN">
+        <div style={{ padding: "3rem", textAlign: "center", color: "var(--text-muted)" }}>
+          Loading member details from PostgreSQL database...
+        </div>
+      </DashboardLayout>
+    );
+  }
+
+  if (!customer) {
+    return (
+      <DashboardLayout title="Member Not Found" userName="Admin User" userRole="ADMIN">
+        <div style={{ padding: "3rem", textAlign: "center" }}>
+          <p style={{ marginBottom: "1rem" }}>Member record not found in database.</p>
+          <Link href="/customers">
+            <Button variant="primary" icon={<ArrowLeft size={16} />}>
+              Back to Members List
+            </Button>
+          </Link>
+        </div>
+      </DashboardLayout>
+    );
+  }
+
+  const customerLoans = customer.loans || [];
+  const customerTxns = customer.transactions || [];
+
   const totalLoansCount = customerLoans.length;
-  const totalLoanAmount = customerLoans.reduce((sum, l) => sum + l.loanAmount, 0);
-  const totalPaidAmount = customerLoans.reduce((sum, l) => sum + l.paidAmount, 0);
-  const remainingSthiti = customerLoans.reduce((sum, l) => sum + l.remainingAmount, 0);
+  const totalLoanAmount = customerLoans.reduce((sum: number, l: any) => sum + Number(l.loanAmount || 0), 0);
+  const totalPaidAmount = customerLoans.reduce((sum: number, l: any) => sum + Number(l.paidAmount || 0), 0);
+  const remainingSthiti = customerLoans.reduce((sum: number, l: any) => sum + Number(l.remainingAmount || 0), 0);
+  const savingsBalance = Number(customer.savingsAccount?.currentBalance || 0);
 
   return (
     <DashboardLayout
@@ -81,7 +119,7 @@ export default function CustomerProfilePage() {
             </div>
             <div className={styles.savingsCard}>
               <span className={styles.savingsLabel}>Savings Balance (মোট সঞ্চয়)</span>
-              <span className={styles.savingsValue}>৳{customer.savingsBalance.toLocaleString()}</span>
+              <span className={styles.savingsValue}>৳{savingsBalance.toLocaleString()}</span>
             </div>
           </div>
         </Card>
@@ -136,21 +174,21 @@ export default function CustomerProfilePage() {
         {/* Tab Content */}
         {activeTab === "loans" && (
           <Card title="Member Loan Contracts">
-            <Table
-              keyExtractor={(l) => l.id}
+            <Table<any>
+              keyExtractor={(l: any) => l.id}
               data={customerLoans}
               columns={[
                 { header: "Loan Code", accessorKey: "loanCode" },
                 { header: "Purpose", accessorKey: "loanPurpose" },
-                { header: "Amount", cell: (l) => `৳${l.loanAmount.toLocaleString()}` },
-                { header: "Interest", cell: (l) => `${l.interestRate}% (${l.interestType})` },
-                { header: "Total Payable", cell: (l) => `৳${l.totalPayable.toLocaleString()}` },
-                { header: "Paid Amount", cell: (l) => `৳${l.paidAmount.toLocaleString()}` },
+                { header: "Amount", cell: (l: any) => `৳${Number(l.loanAmount).toLocaleString()}` },
+                { header: "Interest", cell: (l: any) => `${Number(l.interestRate)}% (${l.interestType})` },
+                { header: "Total Payable", cell: (l: any) => `৳${Number(l.totalPayable).toLocaleString()}` },
+                { header: "Paid Amount", cell: (l: any) => `৳${Number(l.paidAmount).toLocaleString()}` },
                 {
                   header: "Remaining (স্থিতি)",
-                  cell: (l) => <strong className="money-text">৳{l.remainingAmount.toLocaleString()}</strong>,
+                  cell: (l: any) => <strong className="money-text">৳{Number(l.remainingAmount).toLocaleString()}</strong>,
                 },
-                { header: "Status", cell: (l) => <Badge status={l.status} /> },
+                { header: "Status", cell: (l: any) => <Badge status={l.status} /> },
               ]}
             />
           </Card>
@@ -158,22 +196,25 @@ export default function CustomerProfilePage() {
 
         {activeTab === "ledger" && (
           <Card title="Member Dual-Ledger Records (সঞ্চয় ও ঋণ রেজিস্টার)">
-            <Table
-              keyExtractor={(t) => t.id}
+            <Table<any>
+              keyExtractor={(t: any) => t.id}
               data={customerTxns}
               columns={[
                 { header: "Code", accessorKey: "transactionCode" },
-                { header: "Date (তারিখ)", accessorKey: "date" },
+                {
+                  header: "Date (তারিখ)",
+                  cell: (t: any) => (t.transactionDate ? String(t.transactionDate).split("T")[0] : t.date || "N/A"),
+                },
                 {
                   header: "Type",
-                  cell: (t) => (
+                  cell: (t: any) => (
                     <Badge
                       status={t.type === "INSTALLMENT_PAYMENT" ? "paid" : "active"}
-                      label={t.type.replace(/_/g, " ")}
+                      label={(t.type || "").replace(/_/g, " ")}
                     />
                   ),
                 },
-                { header: "Amount (টাকা)", cell: (t) => `৳${t.amount.toLocaleString()}` },
+                { header: "Amount (টাকা)", cell: (t: any) => `৳${Number(t.amount).toLocaleString()}` },
                 { header: "Reference", accessorKey: "referenceNo" },
                 { header: "Description", accessorKey: "description" },
                 { header: "Collector", accessorKey: "createdBy" },

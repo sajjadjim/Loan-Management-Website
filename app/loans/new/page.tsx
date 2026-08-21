@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
@@ -8,14 +8,30 @@ import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { ArrowLeft, Calculator, CheckCircle, Banknote } from "lucide-react";
-import { INITIAL_CUSTOMERS } from "@/lib/data/mockData";
 import { computeLoanSummary } from "@/lib/loan/loanSummary";
 import { generateInstallmentSchedule } from "@/lib/loan/calculateInstallment";
 import styles from "./newLoan.module.css";
 
 export default function NewLoanPage() {
   const router = useRouter();
-  const [selectedCustomerId, setSelectedCustomerId] = useState(INITIAL_CUSTOMERS[0].id);
+  const [customers, setCustomers] = useState<any[]>([]);
+  const [loadingCustomers, setLoadingCustomers] = useState(true);
+  const [selectedCustomerId, setSelectedCustomerId] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+
+  // Fetch registered members from PostgreSQL database
+  useEffect(() => {
+    fetch("/api/customers")
+      .then((res) => res.json())
+      .then((json) => {
+        if (json.success && Array.isArray(json.data) && json.data.length > 0) {
+          setCustomers(json.data);
+          setSelectedCustomerId(json.data[0].id);
+        }
+      })
+      .catch((err) => console.error("Error loading customers from database:", err))
+      .finally(() => setLoadingCustomers(false));
+  }, []);
 
   // Loan Form State
   const [principal, setPrincipal] = useState(100000);
@@ -47,10 +63,43 @@ export default function NewLoanPage() {
     interestType,
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    alert("Loan contract successfully created!");
-    router.push("/loans");
+    if (!selectedCustomerId) {
+      alert("Please select a valid member from the database.");
+      return;
+    }
+
+    setSubmitting(true);
+    try {
+      const res = await fetch("/api/loans", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          customerId: selectedCustomerId,
+          loanAmount: Number(principal),
+          interestRate: Number(interestRate),
+          interestType,
+          durationMonths: Number(durationMonths),
+          frequency,
+          totalInstallments: Number(totalInstallments),
+          loanPurpose,
+          startDate,
+        }),
+      });
+
+      const json = await res.json();
+      if (json.success) {
+        alert("Loan contract successfully created and saved to PostgreSQL database!");
+        router.push("/loans");
+      } else {
+        alert(`Error creating loan: ${json.error || "Unknown error"}`);
+      }
+    } catch (err: any) {
+      alert("Failed to connect to database server: " + err.message);
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -64,7 +113,7 @@ export default function NewLoanPage() {
 
         <div className={styles.formGrid}>
           {/* Form */}
-          <Card title="Loan Application Details">
+          <Card title="Loan Application Details (Database Synced)">
             <form onSubmit={handleSubmit} className={styles.form}>
               <div className={styles.field}>
                 <label className={styles.label}>Select Member (সদস্য নির্বাচন)</label>
@@ -72,12 +121,19 @@ export default function NewLoanPage() {
                   className={styles.select}
                   value={selectedCustomerId}
                   onChange={(e) => setSelectedCustomerId(e.target.value)}
+                  disabled={loadingCustomers || customers.length === 0}
                 >
-                  {INITIAL_CUSTOMERS.map((c) => (
-                    <option key={c.id} value={c.id}>
-                      {c.fullName} ({c.memberCode}) - {c.phone}
-                    </option>
-                  ))}
+                  {loadingCustomers ? (
+                    <option value="">Loading members from database...</option>
+                  ) : customers.length === 0 ? (
+                    <option value="">No members found in database</option>
+                  ) : (
+                    customers.map((c) => (
+                      <option key={c.id} value={c.id}>
+                        {c.fullName} ({c.memberCode}) - {c.phone}
+                      </option>
+                    ))
+                  )}
                 </select>
               </div>
 
@@ -160,8 +216,14 @@ export default function NewLoanPage() {
                 />
               </div>
 
-              <Button type="submit" variant="primary" size="lg" icon={<CheckCircle size={18} />}>
-                Approve & Issue Loan Contract
+              <Button
+                type="submit"
+                variant="primary"
+                size="lg"
+                disabled={submitting || loadingCustomers || customers.length === 0}
+                icon={<CheckCircle size={18} />}
+              >
+                {submitting ? "Saving to Database..." : "Approve & Issue Loan Contract"}
               </Button>
             </form>
           </Card>

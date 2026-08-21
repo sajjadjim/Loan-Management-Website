@@ -10,7 +10,6 @@ import {
   Receipt,
   History,
   FileSpreadsheet,
-  ShieldCheck,
   Building2,
   X,
 } from "lucide-react";
@@ -23,7 +22,6 @@ const NAV_ITEMS = [
   { label: "Collect / Deposit", href: "/collections", icon: Receipt },
   { label: "Transactions", href: "/transactions", icon: History },
   { label: "Financial Reports", href: "/reports", icon: FileSpreadsheet },
-  { label: "Audit Trail", href: "/audit-logs", icon: ShieldCheck },
 ];
 
 export interface SidebarProps {
