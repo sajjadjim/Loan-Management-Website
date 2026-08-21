@@ -19,9 +19,9 @@ export default function CollectionsPage() {
 
   // Form entries
   const [installmentNo, setInstallmentNo] = useState<number>(1);
-  const [loanCollectionAmount, setLoanCollectionAmount] = useState<number>(25000);
-  const [savingsDeposit, setSavingsDeposit] = useState<number>(500);
-  const [savingsWithdrawal, setSavingsWithdrawal] = useState<number>(0);
+  const [loanCollectionAmount, setLoanCollectionAmount] = useState<number | "">(0);
+  const [savingsDeposit, setSavingsDeposit] = useState<number | "">(0);
+  const [savingsWithdrawal, setSavingsWithdrawal] = useState<number | "">(0);
   const [referenceNo, setReferenceNo] = useState<string>(`REC-${Date.now().toString().slice(-4)}`);
   const [collectorNote, setCollectorNote] = useState<string>("নিয়মিত কিস্তি আদায়");
   const [submitting, setSubmitting] = useState(false);
@@ -47,8 +47,12 @@ export default function CollectionsPage() {
   const currentLoanBalance = activeLoan ? Number(activeLoan.remainingAmount) : 0;
   const currentSavingsBalance = currentCustomer?.savingsAccount ? Number(currentCustomer.savingsAccount.currentBalance) : 0;
 
-  const newLoanBalance = Math.max(0, currentLoanBalance - loanCollectionAmount);
-  const newSavingsBalance = Math.max(0, currentSavingsBalance + savingsDeposit - savingsWithdrawal);
+  const numLoanCollection = Number(loanCollectionAmount || 0);
+  const numSavingsDeposit = Number(savingsDeposit || 0);
+  const numSavingsWithdrawal = Number(savingsWithdrawal || 0);
+
+  const newLoanBalance = Math.max(0, currentLoanBalance - numLoanCollection);
+  const newSavingsBalance = Math.max(0, currentSavingsBalance + numSavingsDeposit - numSavingsWithdrawal);
 
   const handleProcessCollection = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -63,9 +67,9 @@ export default function CollectionsPage() {
           customerId: selectedCustomerId,
           loanId: activeLoan?.id,
           paymentDate,
-          loanPaymentAmount: loanCollectionAmount,
-          savingsDepositAmount: savingsDeposit,
-          savingsWithdrawalAmount: savingsWithdrawal,
+          loanPaymentAmount: numLoanCollection,
+          savingsDepositAmount: numSavingsDeposit,
+          savingsWithdrawalAmount: numSavingsWithdrawal,
           referenceNo,
           note: collectorNote,
         }),
@@ -80,11 +84,11 @@ export default function CollectionsPage() {
           memberCode: currentCustomer.memberCode,
           loanCode: activeLoan?.loanCode || "N/A",
           installmentNo,
-          loanCollectionAmount,
+          loanCollectionAmount: numLoanCollection,
           previousLoanBalance: currentLoanBalance,
           newLoanBalance,
-          savingsDeposit,
-          savingsWithdrawal,
+          savingsDeposit: numSavingsDeposit,
+          savingsWithdrawal: numSavingsWithdrawal,
           previousSavingsBalance: currentSavingsBalance,
           newSavingsBalance,
           referenceNo,
@@ -175,8 +179,13 @@ export default function CollectionsPage() {
                         <Input
                           label="Loan Collection (আদায় ৳)"
                           type="number"
+                          placeholder="0"
                           value={loanCollectionAmount}
-                          onChange={(e) => setLoanCollectionAmount(Number(e.target.value))}
+                          onChange={(e) =>
+                            setLoanCollectionAmount(
+                              e.target.value === "" ? "" : Number(e.target.value)
+                            )
+                          }
                         />
                       </div>
                     </>
@@ -199,14 +208,24 @@ export default function CollectionsPage() {
                     <Input
                       label="Savings Deposit (জমা ৳)"
                       type="number"
+                      placeholder="0"
                       value={savingsDeposit}
-                      onChange={(e) => setSavingsDeposit(Number(e.target.value))}
+                      onChange={(e) =>
+                        setSavingsDeposit(
+                          e.target.value === "" ? "" : Number(e.target.value)
+                        )
+                      }
                     />
                     <Input
                       label="Savings Withdrawal (উত্তোলন ৳)"
                       type="number"
+                      placeholder="0"
                       value={savingsWithdrawal}
-                      onChange={(e) => setSavingsWithdrawal(Number(e.target.value))}
+                      onChange={(e) =>
+                        setSavingsWithdrawal(
+                          e.target.value === "" ? "" : Number(e.target.value)
+                        )
+                      }
                     />
                   </div>
                 </div>
