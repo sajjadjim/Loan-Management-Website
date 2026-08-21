@@ -1,0 +1,229 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.notebookHeaderBanner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  padding: 1.25rem 1.5rem;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+}
+
+.bannerInfo h3 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.bannerInfo p {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+}
+
+.layoutGrid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 1.5rem;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.select {
+  width: 100%;
+  min-height: var(--touch-target-min);
+  padding: 0.6rem 0.85rem;
+  font-size: 0.9375rem;
+  color: var(--text-primary);
+  background-color: var(--bg-surface);
+  border: 1.5px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  outline: none;
+}
+
+.dualSection {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.accountBox {
+  background-color: var(--bg-main);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.boxTitle {
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: var(--primary);
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.balanceInfo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+}
+
+.noLoanAlert {
+  font-size: 0.8125rem;
+  color: var(--warning-text);
+  background-color: var(--warning-bg);
+  padding: 0.6rem;
+  border-radius: var(--radius-sm);
+}
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+}
+
+.previewGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding-bottom: 1rem;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.previewGroup h5 {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.calcRow {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+}
+
+.resultRow {
+  font-weight: 700;
+  color: var(--text-primary);
+  padding-top: 0.4rem;
+  border-top: 1px dashed var(--border-color);
+}
+
+.minusText { color: var(--danger-text); font-weight: 600; }
+.plusText { color: var(--success-text); font-weight: 600; }
+
+.newLoanText { color: var(--warning-text); font-size: 1.25rem; }
+.newSavingsText { color: var(--primary); font-size: 1.25rem; }
+
+/* Receipt Styling */
+.receiptContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.receiptHeader {
+  text-align: center;
+  border-bottom: 2px solid var(--text-primary);
+  padding-bottom: 0.75rem;
+}
+
+.receiptHeader h3 { font-size: 1.1rem; font-weight: 700; }
+.receiptHeader p { font-size: 0.8125rem; color: var(--text-secondary); }
+
+.receiptMeta {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 0.5rem;
+  font-size: 0.8125rem;
+}
+
+.receiptDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-size: 0.875rem;
+}
+
+.rRow {
+  display: flex;
+  justify-content: space-between;
+}
+
+.receiptTable {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0.5rem 0;
+}
+
+.receiptTable th, .receiptTable td {
+  border: 1px solid var(--border-color);
+  padding: 0.5rem;
+  font-size: 0.8125rem;
+  text-align: left;
+}
+
+.receiptSignatures {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 2.5rem;
+  font-size: 0.8125rem;
+  text-align: center;
+}
+
+.signLine {
+  display: block;
+  width: 140px;
+  border-top: 1px dashed var(--text-primary);
+  margin-bottom: 0.25rem;
+}
+
+@media (max-width: 900px) {
+  .layoutGrid {
+    grid-template-columns: 1fr;
+  }
+  .dualSection {
+    grid-template-columns: 1fr;
+  }
+  .row {
+    grid-template-columns: 1fr;
+  }
+  .notebookHeaderBanner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+}

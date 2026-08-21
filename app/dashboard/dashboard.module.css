@@ -1,0 +1,118 @@
+.dashboardContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.quickBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: var(--bg-surface);
+  padding: 1.25rem 1.5rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-sm);
+}
+
+.welcomeText {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.subText {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  margin-top: 0.15rem;
+}
+
+.actionButtons {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.metricsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.25rem;
+}
+
+.metricCard {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.metricHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.metricLabel {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+}
+
+.iconBg {
+  width: 42px;
+  height: 42px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.blueBg { background-color: #eff6ff; color: #2563eb; }
+.indigoBg { background-color: #eef2ff; color: #4f46e5; }
+.emeraldBg { background-color: #ecfdf5; color: #059669; }
+.amberBg { background-color: #fffbeb; color: #d97706; }
+.roseBg { background-color: #fef2f2; color: #dc2626; }
+.cyanBg { background-color: #ecfeff; color: #0891b2; }
+
+.metricValue {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0.5rem 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.metricFooter {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.textSuccess { color: var(--success-text); font-weight: 600; }
+.textDanger { color: var(--danger-text); font-weight: 600; }
+
+.tablesGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+@media (max-width: 768px) {
+  .quickBar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+  }
+  .actionButtons {
+    flex-direction: column;
+    width: 100%;
+  }
+  .actionButtons button, .actionButtons a {
+    width: 100%;
+  }
+  .metricsGrid {
+    grid-template-columns: 1fr;
+  }
+  .tablesGrid {
+    grid-template-columns: 1fr;
+  }
+}

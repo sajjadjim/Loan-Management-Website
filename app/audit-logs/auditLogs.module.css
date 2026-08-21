@@ -1,0 +1,35 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.topBar {
+  display: flex;
+  align-items: center;
+}
+
+.searchBox {
+  flex: 1;
+  max-width: 480px;
+}
+
+.diffBox {
+  font-family: monospace;
+  font-size: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  background-color: var(--bg-main);
+  padding: 0.4rem 0.6rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+}
+
+.oldVal {
+  color: var(--danger-text);
+}
+
+.newVal {
+  color: var(--success-text);
+}
