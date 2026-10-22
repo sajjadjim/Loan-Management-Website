@@ -117,85 +117,132 @@ export default function DashboardPage() {
         <div className="container">
           {/* Hero Header */}
           <div className={styles.dashboardHeader}>
-            <div>
+            <div className={styles.heroTextGroup}>
+              <div className={styles.heroBadgeRow}>
+                <span className={styles.liveIndicator}>
+                  <span className={styles.livePulse}></span>
+                  সিস্টেম সক্রিয়
+                </span>
+                <span className={styles.dateBadge}>
+                  {new Date().toLocaleDateString(lang === 'bn' ? 'bn-BD' : 'en-US', {
+                    day: 'numeric',
+                    month: 'long',
+                    year: 'numeric'
+                  })}
+                </span>
+              </div>
               <h1 className={styles.heroTitle}>{t.dashboard}</h1>
               <p className={styles.heroSub}>{t.appSubtitle}</p>
             </div>
 
-            <button
-              onClick={() => setIsAddModalOpen(true)}
-              className="btn btn-primary"
-            >
-              <Plus size={18} />
-              <span>{t.addMember}</span>
-            </button>
+            <div className={styles.heroActions}>
+              <button
+                onClick={() => setIsAddModalOpen(true)}
+                className="btn btn-primary"
+                title="নতুন সদস্য নিবন্ধন করুন"
+              >
+                <Plus size={18} strokeWidth={2.5} />
+                <span>{t.addMember}</span>
+              </button>
+            </div>
           </div>
 
           {/* Top 5 Metrics Overview */}
           <div className={styles.statsGrid}>
             {/* Active Members */}
-            <div className={styles.statCard}>
+            <div className={`${styles.statCard} ${styles.statCardBlue}`}>
               <div className={styles.statHeader}>
-                <span>{t.activeMembers}</span>
-                <Users size={18} style={{ color: 'var(--accent-blue)' }} />
+                <span className={styles.statLabel}>{t.activeMembers}</span>
+                <div className={`${styles.statIconBox} ${styles.iconBoxBlue}`}>
+                  <Users size={18} />
+                </div>
               </div>
-              <div className={styles.statVal}>{stats.activeCount}</div>
+              <div className={styles.statVal}>{stats.activeCount} <span className={styles.statUnit}>জন</span></div>
+              <div className={styles.statFootnote}>নিবন্ধিত সক্রিয় সদস্য</div>
+              <div className={`${styles.statAccentLine} ${styles.accentBlue}`}></div>
             </div>
 
             {/* Total Granted Loan */}
-            <div className={styles.statCard}>
+            <div className={`${styles.statCard} ${styles.statCardAmber}`}>
               <div className={styles.statHeader}>
-                <span>{t.totalGrantedLoan}</span>
-                <DollarSign size={18} style={{ color: 'var(--accent-amber)' }} />
+                <span className={styles.statLabel}>{t.totalGrantedLoan}</span>
+                <div className={`${styles.statIconBox} ${styles.iconBoxAmber}`}>
+                  <DollarSign size={18} />
+                </div>
               </div>
               <div className={styles.statVal}>
-                ৳ {stats.totalGranted.toLocaleString()}
+                <span className={styles.currencySymbol}>৳</span>{stats.totalGranted.toLocaleString()}
               </div>
+              <div className={styles.statFootnote}>বিতরণকৃত মোট ঋণ</div>
+              <div className={`${styles.statAccentLine} ${styles.accentAmber}`}></div>
             </div>
 
             {/* Total Collected */}
-            <div className={styles.statCard}>
+            <div className={`${styles.statCard} ${styles.statCardGreen}`}>
               <div className={styles.statHeader}>
-                <span>{t.totalCollectedLoan}</span>
-                <CheckCircle2 size={18} style={{ color: 'var(--primary)' }} />
+                <span className={styles.statLabel}>{t.totalCollectedLoan}</span>
+                <div className={`${styles.statIconBox} ${styles.iconBoxGreen}`}>
+                  <CheckCircle2 size={18} />
+                </div>
               </div>
-              <div className="textGreen" style={{ fontSize: '1.35rem', fontWeight: 800 }}>
-                ৳ {stats.totalCollected.toLocaleString()}
+              <div className={`${styles.statVal} ${styles.textEmerald}`}>
+                <span className={styles.currencySymbol}>৳</span>{stats.totalCollected.toLocaleString()}
               </div>
+              <div className={styles.statFootnote}>পরিশোধিত মোট কিস্তি</div>
+              <div className={`${styles.statAccentLine} ${styles.accentGreen}`}></div>
             </div>
 
             {/* Remaining Loan */}
-            <div className={styles.statCard}>
+            <div className={`${styles.statCard} ${styles.statCardRose}`}>
               <div className={styles.statHeader}>
-                <span>{t.remainingLoanBalance}</span>
-                <DollarSign size={18} style={{ color: 'var(--accent-rose)' }} />
+                <span className={styles.statLabel}>{t.remainingLoanBalance}</span>
+                <div className={`${styles.statIconBox} ${styles.iconBoxRose}`}>
+                  <Wallet size={18} />
+                </div>
               </div>
-              <div className="textRose" style={{ fontSize: '1.35rem', fontWeight: 800 }}>
-                ৳ {stats.totalRemaining.toLocaleString()}
+              <div className={`${styles.statVal} ${styles.textRose}`}>
+                <span className={styles.currencySymbol}>৳</span>{stats.totalRemaining.toLocaleString()}
               </div>
+              <div className={styles.statFootnote}>বাকি দেনার পরিমাণ</div>
+              <div className={`${styles.statAccentLine} ${styles.accentRose}`}></div>
             </div>
 
             {/* Total Savings */}
-            <div className={styles.statCard}>
+            <div className={`${styles.statCard} ${styles.statCardPurple}`}>
               <div className={styles.statHeader}>
-                <span>{t.totalSavingsBalance}</span>
-                <Wallet size={18} style={{ color: 'var(--primary)' }} />
+                <span className={styles.statLabel}>{t.totalSavingsBalance}</span>
+                <div className={`${styles.statIconBox} ${styles.iconBoxPurple}`}>
+                  <BookOpen size={18} />
+                </div>
               </div>
-              <div className="textGreen" style={{ fontSize: '1.35rem', fontWeight: 800 }}>
-                ৳ {stats.totalSavings.toLocaleString()}
+              <div className={`${styles.statVal} ${styles.textPurple}`}>
+                <span className={styles.currencySymbol}>৳</span>{stats.totalSavings.toLocaleString()}
               </div>
+              <div className={styles.statFootnote}>মোট রক্ষিত সঞ্চয় ফান্ড</div>
+              <div className={`${styles.statAccentLine} ${styles.accentPurple}`}></div>
             </div>
           </div>
 
           {/* Member Grid Title */}
           <div className={styles.sectionHeader}>
-            <h2 className={styles.sectionTitle}>
-              <Users size={20} style={{ color: 'var(--primary)' }} />
-              <span>{t.memberList}</span>
-            </h2>
-            <span className="badge badge-info">
-              {filteredMembers.length} {t.activeMembers}
-            </span>
+            <div className={styles.sectionTitleGroup}>
+              <h2 className={styles.sectionTitle}>
+                <Users size={22} className={styles.sectionTitleIcon} />
+                <span>{t.memberList}</span>
+              </h2>
+              <span className={styles.memberCountPill}>
+                {filteredMembers.length} {t.activeMembers}
+              </span>
+            </div>
+
+            {searchQuery && (
+              <button 
+                onClick={() => setSearchQuery('')}
+                className={styles.clearSearchBtn}
+              >
+                ফিল্টার মুছুন
+              </button>
+            )}
           </div>
 
           {/* Member Cards Grid */}
@@ -203,74 +250,100 @@ export default function DashboardPage() {
             <div className={styles.membersGrid}>
               {filteredMembers.map((m) => {
                 const summary = memberSummaries[m.id] || { remaining: m.loan_amount, savings: m.savings_initial };
+                const loanTotal = m.loan_amount || 0;
+                const repaid = Math.max(0, loanTotal - summary.remaining);
+                const progressPct = loanTotal > 0 ? Math.min(100, Math.round((repaid / loanTotal) * 100)) : 100;
+                const initialChar = m.name ? m.name.trim().charAt(0) : 'স';
+
                 return (
                   <div key={m.id} className={styles.memberCard}>
                     <div className={styles.memberTop}>
-                      {/* Avatar Photo (or Default Icon) */}
+                      {/* Avatar Photo (or Initial Fallback) */}
                       <div className={styles.cardAvatar}>
                         {m.photo_url ? (
                           <img src={m.photo_url} alt={m.name} className={styles.cardAvatarImg} />
                         ) : (
-                          <User size={24} />
+                          <div className={styles.avatarFallback}>
+                            <span>{initialChar}</span>
+                          </div>
                         )}
                       </div>
 
                       <div className={styles.memberMeta}>
-                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                          <span className={styles.memberNo}>{t.memberNo}: {m.member_no}</span>
-                          <span className={styles.bookBadge}>{t.bookNo}: {m.book_no || '১'}</span>
+                        <div className={styles.badgeRow}>
+                          <span className={styles.memberNoPill}>#{m.member_no}</span>
+                          <span className={styles.bookBadgePill}>{t.bookNo}: {m.book_no || '১'}</span>
                         </div>
                         <h3 className={styles.memberName}>{m.name}</h3>
 
                         {m.guarantor_name && (
-                          <div className={styles.guarantorText}>
-                            <ShieldCheck size={13} style={{ color: 'var(--primary)' }} />
+                          <div className={styles.metaRow}>
+                            <ShieldCheck size={13} className={styles.metaIconPrimary} />
                             <span>জামিনদার: {m.guarantor_name}</span>
                           </div>
                         )}
 
                         {m.nid_number && (
-                          <div className={styles.guarantorText} style={{ color: 'var(--text-muted)' }}>
-                            <FileText size={12} />
+                          <div className={styles.metaRow}>
+                            <FileText size={12} className={styles.metaIconMuted} />
                             <span>NID: {m.nid_number}</span>
                           </div>
                         )}
                       </div>
                     </div>
 
+                    {/* Progress Bar for Loan Repayment */}
+                    {loanTotal > 0 && (
+                      <div className={styles.progressContainer}>
+                        <div className={styles.progressHeader}>
+                          <span className={styles.progressLabel}>ঋণ পরিশোধ অগ্রগতি</span>
+                          <span className={styles.progressVal}>{progressPct}%</span>
+                        </div>
+                        <div className={styles.progressBarTrack}>
+                          <div 
+                            className={styles.progressBarFill} 
+                            style={{ width: `${progressPct}%` }}
+                          ></div>
+                        </div>
+                      </div>
+                    )}
+
                     <div className={styles.financialRow}>
-                      <div className={styles.finBox}>
+                      <div className={`${styles.finBox} ${styles.finBoxRose}`}>
                         <span className={styles.finLabel}>{t.remainingLoanBalance}</span>
-                        <span className={`${styles.finVal} textRose`}>
+                        <span className={`${styles.finVal} ${styles.textRose}`}>
                           ৳ {summary.remaining.toLocaleString()}
                         </span>
                       </div>
-                      <div className={styles.finBox}>
+                      <div className={`${styles.finBox} ${styles.finBoxEmerald}`}>
                         <span className={styles.finLabel}>{t.totalSavings}</span>
-                        <span className={`${styles.finVal} textGreen`}>
+                        <span className={`${styles.finVal} ${styles.textEmerald}`}>
                           ৳ {summary.savings.toLocaleString()}
                         </span>
                       </div>
                     </div>
 
                     <div className={styles.cardFooter}>
-                      <div className={styles.mobileText}>
+                      <a 
+                        href={m.mobile ? `tel:${m.mobile}` : undefined} 
+                        className={styles.mobileLink}
+                        title="সদস্যকে কল করুন"
+                      >
                         <Phone size={13} />
                         <span>{m.mobile || '-'}</span>
-                      </div>
+                      </a>
 
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                      <div className={styles.cardBtnGroup}>
                         <button
                           onClick={() => setDeletingMember(m)}
-                          className="btn btn-danger btn-sm"
+                          className={styles.deleteMemberBtn}
                           title="সদস্য স্থায়ীভাবে মুছে ফেলুন"
-                          style={{ padding: '0.4rem 0.55rem' }}
                         >
                           <Trash2 size={14} />
                         </button>
-                        <Link href={`/members/${m.id}`} className="btn btn-secondary btn-sm">
-                          <span>পাসবই দেখুন</span>
-                          <ArrowRight size={14} />
+                        <Link href={`/members/${m.id}`} className={styles.viewPassbookBtn}>
+                          <span>পাসবই</span>
+                          <ArrowRight size={14} className={styles.arrowIcon} />
                         </Link>
                       </div>
                     </div>
@@ -280,15 +353,31 @@ export default function DashboardPage() {
             </div>
           ) : (
             <div className={styles.emptyState}>
-              <Search size={36} />
-              <p>কোনো সদস্য পাওয়া যায়নি। নতুন সদস্য যোগ করতে উপরের বাটনটিতে চাপুন।</p>
-              <button
-                onClick={() => setIsAddModalOpen(true)}
-                className="btn btn-primary btn-sm"
-              >
-                <Plus size={16} />
-                <span>{t.addMember}</span>
-              </button>
+              <div className={styles.emptyIconBox}>
+                <Search size={32} />
+              </div>
+              <h3 className={styles.emptyTitle}>কোনো সদস্য পাওয়া যায়নি</h3>
+              <p className={styles.emptySubtitle}>
+                {searchQuery 
+                  ? `"${searchQuery}" এর সাথে মিলে এমন কোনো সদস্য পাওয়া যায়নি।`
+                  : 'এখনও কোনো সদস্য যোগ করা হয়নি। প্রথম সদস্য যোগ করতে নিচের বাটনে চাপুন।'}
+              </p>
+              {searchQuery ? (
+                <button
+                  onClick={() => setSearchQuery('')}
+                  className="btn btn-secondary btn-sm"
+                >
+                  ফিল্টার মুছুন
+                </button>
+              ) : (
+                <button
+                  onClick={() => setIsAddModalOpen(true)}
+                  className="btn btn-primary"
+                >
+                  <Plus size={16} />
+                  <span>{t.addMember}</span>
+                </button>
+              )}
             </div>
           )}
         </div>

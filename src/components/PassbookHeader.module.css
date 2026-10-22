@@ -1,9 +1,9 @@
 .passbookCard {
   background: #ffffff;
   border: 1px solid var(--border-color);
-  border-radius: var(--radius-md);
-  padding: 1.5rem;
-  box-shadow: var(--shadow-md);
+  border-radius: var(--radius-lg);
+  padding: 1.75rem;
+  box-shadow: 0 8px 30px -8px rgba(15, 23, 42, 0.06);
   position: relative;
   overflow: hidden;
 }
@@ -13,29 +13,29 @@
   align-items: center;
   justify-content: space-between;
   border-bottom: 1px dashed var(--border-color);
-  padding-bottom: 1rem;
-  margin-bottom: 1.25rem;
+  padding-bottom: 1.25rem;
+  margin-bottom: 1.5rem;
 }
 
 .profileArea {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 1.15rem;
 }
 
 .avatarBox {
-  width: 58px;
-  height: 58px;
-  border-radius: 50%;
+  width: 64px;
+  height: 64px;
+  border-radius: 18px;
   overflow: hidden;
-  border: 2px solid var(--primary);
+  border: 2px solid #ffffff;
   background: #f1f5f9;
   display: flex;
   align-items: center;
   justify-content: center;
   color: var(--primary);
   flex-shrink: 0;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.1);
 }
 
 .avatarImg {

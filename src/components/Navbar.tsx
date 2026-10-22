@@ -25,37 +25,57 @@ export const Navbar: React.FC<NavbarProps> = ({
   onSearchChange
 }) => {
   const t = translations[lang];
-  const { requestLogoutConfirmation } = useAuth();
+  const { user, requestLogoutConfirmation } = useAuth();
 
-  let dbBadgeLabel = t.dbModeLocal;
+  let dbBadgeText = 'লোকাল মোড';
+  let dbBadgeTooltip = 'লোকাল স্টোরেজ (ডেমো) মোড সক্রিয় - ডাটা ব্রাউজারে সংরক্ষিত';
+  let isCloudActive = false;
+
   if (isPrimaryConfigured && isSecondaryConfigured) {
-    dbBadgeLabel = 'ডাবল Supabase Cloud DB + লোকাল ব্যাকআপ';
+    dbBadgeText = 'ডাবল ক্লাউড';
+    dbBadgeTooltip = 'প্রাইমারি ও ব্যাকআপ Supabase ক্লাউড ডাটাবেজ সক্রিয়';
+    isCloudActive = true;
   } else if (isPrimaryConfigured) {
-    dbBadgeLabel = t.dbModeSupabase;
+    dbBadgeText = 'ক্লাউড সিঙ্ক';
+    dbBadgeTooltip = 'Supabase ক্লাউড ডাটাবেজ সক্রিয়';
+    isCloudActive = true;
   }
+
+  // User display name or email initials
+  const userInitials = user?.displayName
+    ? user.displayName.slice(0, 2).toUpperCase()
+    : user?.email
+    ? user.email.slice(0, 2).toUpperCase()
+    : 'ইউ';
 
   return (
     <header className={`${styles.navbar} ${onSearchChange !== undefined ? styles.hasSearch : ''}`}>
       <div className="container">
         <div className={styles.inner}>
           {/* Left Brand */}
-          <Link href="/" className={styles.brand}>
+          <Link href="/" className={styles.brand} title="হোমপেজে যান">
             <div className={styles.logoIcon}>
-              <BookOpen size={22} />
+              <BookOpen size={20} strokeWidth={2.2} />
             </div>
             <div className={styles.titleGroup}>
-              <span className={styles.brandTitle}>{t.appTitle}</span>
+              <div className={styles.titleRow}>
+                <span className={styles.brandTitle}>{t.appTitle}</span>
+                <span className={styles.versionBadge}>v2.0</span>
+              </div>
               <span className={styles.brandSubtitle}>{t.appSubtitle}</span>
             </div>
           </Link>
 
           {/* Right Controls */}
           <div className={styles.rightGroup}>
-            {/* Multi-Cloud Dual Supabase Sync Status Badge */}
-            <div className={styles.dbBadge} title="Primary Supabase + Secondary Supabase + Local Backup">
-              <ShieldCheck size={13} style={{ color: 'var(--primary)' }} />
-              <span className={styles.dbDot}></span>
-              <span>{dbBadgeLabel}</span>
+            {/* Status Indicator Pill */}
+            <div 
+              className={`${styles.dbBadge} ${isCloudActive ? styles.dbBadgeCloud : styles.dbBadgeLocal}`}
+              title={dbBadgeTooltip}
+            >
+              <span className={`${styles.dbDot} ${isCloudActive ? styles.dotCloud : styles.dotLocal}`}></span>
+              <ShieldCheck size={13} className={styles.badgeShield} />
+              <span className={styles.dbBadgeLabel}>{dbBadgeText}</span>
             </div>
 
             {/* Desktop Search Input */}
@@ -69,50 +89,65 @@ export const Navbar: React.FC<NavbarProps> = ({
                   value={searchQuery}
                   onChange={(e) => onSearchChange(e.target.value)}
                 />
+                <span className={styles.searchShortcut} title="খুঁজুন">⌘K</span>
               </div>
             )}
 
             {/* Export Backup JSON Button */}
             <button
               onClick={exportFullBackupJSON}
-              className="btn btn-secondary btn-sm"
+              className={`${styles.navBtn} ${styles.backupBtn}`}
               title="ডাটাবেজ ব্যাকআপ ফাইল ডাউনলোড করুন (JSON Backup)"
             >
-              <Download size={14} />
-              <span className={styles.btnLabel}>ব্যাকআপ ফাইল</span>
+              <Download size={15} />
+              <span className={styles.btnLabel}>ব্যাকআপ</span>
             </button>
 
             {/* Language Toggle */}
             <button
               onClick={onToggleLang}
-              className={styles.langBtn}
+              className={`${styles.navBtn} ${styles.langBtn}`}
               title="Switch Language / ভাষা পরিবর্তন"
             >
-              <Globe size={14} />
-              <span>{lang === 'bn' ? 'English' : 'বাংলা'}</span>
+              <Globe size={15} />
+              <span className={styles.langText}>{lang === 'bn' ? 'EN' : 'বাংলা'}</span>
             </button>
 
             {/* Add Member CTA */}
             {onOpenAddMemberModal && (
               <button
                 onClick={onOpenAddMemberModal}
-                className="btn btn-primary btn-sm"
+                className={styles.addMemberBtn}
+                title="নতুন সদস্য নিবন্ধন করুন"
               >
-                <Plus size={16} />
-                <span className={styles.btnLabel}>{t.addMember}</span>
+                <Plus size={16} strokeWidth={2.5} />
+                <span>{t.addMember}</span>
               </button>
             )}
 
-            {/* Firebase Logout */}
-            <button
-              onClick={requestLogoutConfirmation}
-              className="btn btn-secondary btn-sm"
-              title="লগআউট করুন (Logout)"
-              style={{ color: '#ef4444', borderColor: 'rgba(239, 68, 68, 0.3)' }}
-            >
-              <LogOut size={14} />
-              <span className={styles.btnLabel}>লগআউট</span>
-            </button>
+            {/* User Profile & Logout */}
+            <div className={styles.userSection}>
+              {user && (
+                <div 
+                  className={styles.userAvatar} 
+                  title={user.email || user.displayName || 'অ্যাডমিন'}
+                >
+                  {user.photoURL ? (
+                    <img src={user.photoURL} alt="User" className={styles.avatarImg} />
+                  ) : (
+                    <span>{userInitials}</span>
+                  )}
+                </div>
+              )}
+              <button
+                onClick={requestLogoutConfirmation}
+                className={styles.logoutBtn}
+                title="লগআউট করুন"
+              >
+                <LogOut size={15} />
+                <span className={styles.logoutLabel}>লগআউট</span>
+              </button>
+            </div>
           </div>
         </div>
 
