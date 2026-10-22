@@ -1,45 +1,31 @@
-# 🏦 Loan & Samity Management System
+# 🏦 Simple Loan Management System (ঋণ ও সঞ্চয় ব্যবস্থাপনা সিস্টেম)
 
-A modern, full-stack **Loan & Microfinance Management Web Application** designed for cooperative societies (সমবায় সমিতি), microfinance institutions, and loan management organizations. Built with **Next.js 16 (App Router)**, **TypeScript**, **Prisma ORM**, and **PostgreSQL (Supabase)**.
+A modern, high-performance, and feature-rich **Microfinance & Loan Management Web Application** built with **Next.js 16 (App Router)**, **TypeScript**, **Supabase PostgreSQL**, and **Google Drive Automated Document Storage**.
+
+Designed for non-profit organizations, samity (সমিতি), and micro-credit loan management to track member deposits, savings withdrawals, loan repayments, ledger passbooks, NID documents, and guarantor details with ease.
 
 ---
 
-## ✨ Features & Core Capabilities
+## 🌟 Key Features
 
-### 📊 1. Executive Dashboard (`/dashboard`)
-- **Real-Time Financial Overview**: Live database metrics displaying Total Members, Active Loans Count, Total Disbursed Amount, Total Collected Amount, Outstanding Loan Balance (স্থিতি), Overdue Balance, and Total Savings Vault.
-- **Quick Action Hub**: Instant navigation to record daily collections or issue new loan contracts.
-- **Recent Activity Feed**: Real-time listing of latest loan contracts and financial transactions.
+### 👥 1. Comprehensive Member Management
+- **Automatic Member & Book Numbering**: Seamless auto-incrementing member and passbook numbers.
+- **Complete Profile & Guarantor Tracking**: Store detailed member address, mobile number, NID number, guarantor details, and guarantor NID.
+- **Webcam & Device Uploads**: Live photo capture directly from laptop/mobile cameras or device file picker with automatic browser-side image compression.
 
-### 👥 2. Member & Customer Management (`/customers` & `/customers/[id]`)
-- **Member Registration**: Register new members with Member Code (`MEM-XXXX`), Full Name, Father/Husband Name, Phone Number, NID, Address, and Joining Date.
-- **Automated Savings Vault**: Each registered member automatically gets an associated Savings Account in PostgreSQL.
-- **Detailed Member Profile**: View individual member stats, loan history, dual-ledger transactions (সঞ্চয় ও ঋণ রেজিস্টার), and encrypted private documents.
+### 📁 2. Automated Google Drive Document Storage (Database Saver)
+- **Zero Database Storage Bloat**: Solves Supabase's free tier 500MB limit by delegating all member photos and NID card images to Google Drive.
+- **Per-Member Folder Automation**: Automatically creates a dedicated Google Drive folder (e.g. `Member_125_Anowar_Hosain`) for each member upon registration.
+- **Direct Drive Passbook Access**: Access the member's full Google Drive folder directly from their digital passbook with one click.
 
-### 📜 3. Loan Portfolio Management (`/loans`)
-- **Loan Registry**: Search and filter loan contracts by loan code, member name, member code, or status (Active, Overdue, Completed, Pending).
-- **Repayment Schedule Modal**: View full installment breakdown with due dates, principal breakdown, interest breakdown, and payment status.
+### 📊 3. Passbook & Financial Ledger System
+- **Real-Time Ledger Calculations**: Calculates running total savings, loan balance, remaining dues, and repayment progress automatically.
+- **Printable Passbook View**: Clean, professional print-ready passbook layout formatted for paper records.
+- **Dual Language UI (বাংলা / English)**: Switch instantly between Bengali and English interfaces.
 
-### ✍️ 4. Issue New Loan Contract (`/loans/new`)
-- **Dynamic Database Member Dropdown**: Select active members directly from the PostgreSQL database.
-- **Financial Calculation Engine**: Supports both **Flat Rate (সরল সুদ)** and **Reducing Balance (হ্রাসমান জের)** interest calculation models.
-- **Flexible Tenures & Frequencies**: Daily (দৈনিক), Weekly (সাপ্তাহিক), and Monthly (মাসিক) installment frequencies.
-- **ACID Transaction Guarantee**: Single atomic transaction in PostgreSQL creates the loan contract, generates the complete installment schedule, logs the loan disbursement transaction, and writes an audit log.
-
-### 📑 5. Digital Daily Collection Register (`/collections`)
-- **Digital Notebook (ডিজিটাল আদায় খাতা)**: Record loan repayment collections and savings deposit/withdrawal entries simultaneously.
-- **Live Sthiti Calculation**: Live preview of updated loan remaining balance and savings balance.
-- **Printable Money Receipt**: Generates official money receipt (টাকা জমার রশিদ) with print functionality and member/collector signature fields.
-
-### 💸 6. Financial Transaction Register (`/transactions`)
-- **Audit Trail**: Complete log of all financial movements (Loan Disbursements, Installment Payments, Savings Deposits, Savings Withdrawals).
-- **Transaction Voiding**: Reverses transactions with audit trail tracking.
-- **Type & Search Filtering**: Filter by transaction type or search by transaction code/member name.
-
-### 📈 7. Financial & Audit Reports (`/reports`)
-- **Comprehensive Reports**: Daily Collection Report, Monthly Collection Report, Outstanding Loans Report, Overdue Loans Report, and Member Directory & Savings Report.
-- **Date Range Filters**: Filter reports dynamically by custom start and end dates.
-- **Print & Export**: Print reports directly or export filtered data into **CSV / Excel** format.
+### ⚡ 4. High Availability & Database Redundancy
+- **Dual Supabase Sync**: Supports Primary and Secondary (Backup) Supabase databases for fail-safe data storage.
+- **Local Fallback Mode**: Functions offline with browser LocalStorage backup if database connection is temporarily interrupted.
 
 ---
 
@@ -47,82 +33,61 @@ A modern, full-stack **Loan & Microfinance Management Web Application** designed
 
 | Layer | Technology |
 | :--- | :--- |
-| **Framework** | [Next.js 16 (App Router)](https://nextjs.org/) with Turbopack |
+| **Framework** | [Next.js 16 (App Router)](https://nextjs.org/) |
 | **Language** | [TypeScript](https://www.typescriptlang.org/) |
-| **Database** | [PostgreSQL](https://www.postgresql.org/) (Supabase Compatible) |
-| **ORM** | [Prisma ORM 7](https://www.prisma.io/) |
-| **Validation** | [Zod](https://zod.dev/) |
-| **UI & Styling** | Project-owned CSS Modules (`.module.css`) & CSS Design System Tokens |
+| **Database** | [Supabase PostgreSQL](https://supabase.com/) |
+| **Cloud Storage** | [Google Drive API](https://www.google.com/drive/) / [Google Apps Script](https://script.google.com/) |
+| **Styling** | Vanilla CSS Modules & Glassmorphism UI |
 | **Icons** | [Lucide React](https://lucide.dev/) |
+| **Deployment** | Netlify / Vercel |
 
 ---
 
-## 📁 Directory Structure
+## 🚀 Quick Start Guide
 
-```text
-├── app/
-│   ├── api/
-│   │   ├── collections/     # ACID transaction for daily collections
-│   │   ├── customers/       # Member CRUD endpoints
-│   │   ├── dashboard/       # Dashboard metrics aggregation
-│   │   ├── loans/           # Loan portfolio & contract creation
-│   │   ├── reports/         # Dynamic financial report generation
-│   │   └── transactions/    # Financial transaction ledger & voiding
-│   ├── collections/         # Daily collection register page & receipt modal
-│   ├── customers/           # Member directory & detailed profile page ([id])
-│   ├── dashboard/           # Executive dashboard page
-│   ├── loans/               # Loan portfolio list & issue new loan page (/new)
-│   ├── reports/             # Financial & audit reports page
-│   ├── transactions/        # Financial transaction register page
-│   └── globals.css          # Core CSS design system & variables
-├── components/
-│   ├── layout/              # Sidebar, Header, DashboardLayout
-│   └── ui/                  # Reusable Design System (Button, Card, Input, Table, Badge, Modal)
-├── lib/
-│   ├── db/                  # Prisma client instance
-│   └── loan/                # Loan calculation engines & schedule generator
-├── prisma/
-│   └── schema.prisma        # PostgreSQL database schema & relationships
-└── schemas/                 # Zod validation schemas
-```
+### Prerequisites
+- Node.js `v18+` or `v20+`
+- `npm` or `yarn`
 
----
-
-## 🚀 Getting Started
-
-### 1. Prerequisites
-- Node.js 18.x or higher
-- PostgreSQL Database (Local or Supabase)
-
-### 2. Installation
-Clone the repository and install dependencies:
+### 1. Clone & Install Dependencies
 ```bash
-git clone https://github.com/sajjadjim/Loan-Management-Website.git
-cd Loan-Management-Website
+cd "simple Loan Management"
 npm install
 ```
 
-### 3. Environment Setup
-Create a `.env` file in the root directory and add your PostgreSQL connection URL:
+### 2. Configure Environment Variables
+Create a `.env.local` file in the root directory:
+
 ```env
-DATABASE_URL="postgresql://postgres:[PASSWORD]@[HOST]:5432/postgres?schema=public"
+# Supabase Primary Database
+NEXT_PUBLIC_SUPABASE_URL=https://your-primary-supabase-ref.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-primary-supabase-anon-key
+
+# Optional: Supabase Secondary Database (Backup Sync)
+NEXT_PUBLIC_SUPABASE_URL_SECONDARY=https://your-secondary-supabase-ref.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY_SECONDARY=your-secondary-supabase-anon-key
+
+# Google Drive Storage Integration (Choose Option A or Option B)
+# Option A: Google Apps Script Web App URL
+NEXT_PUBLIC_GOOGLE_SCRIPT_URL=https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec
+
+# Option B: Google Cloud Service Account (Alternative)
+GOOGLE_CLIENT_EMAIL=your-service-account@your-project.iam.gserviceaccount.com
+GOOGLE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----\n"
+GOOGLE_DRIVE_FOLDER_ID=1NnSLLkd-plY13jynoj2O2Z-J7itnoE1V
 ```
 
-### 4. Database Setup & Migration
-Run Prisma migrations to generate database tables:
-```bash
-npx prisma db push
-# or
-npx prisma migrate dev --name init
+### 3. Setup Database Schema (Supabase)
+Run the SQL script located in [`supabase/schema.sql`](supabase/schema.sql) in your Supabase SQL Editor.
+
+```sql
+-- Enable UUID extension
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
+-- Run schema.sql script to create members and transactions tables
 ```
 
-Generate Prisma Client:
-```bash
-npx prisma generate
-```
-
-### 5. Running the Application
-Start the local development server:
+### 4. Run Development Server
 ```bash
 npm run dev
 ```
@@ -130,21 +95,49 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ---
 
-## 🧪 Production Verification & Build
+## ☁️ Google Drive Integration Setup (2 Minutes)
 
-To verify type safety and build the production bundle:
-```bash
-# Type checking
-npx tsc --noEmit
+To automatically store member photos & NID images on Google Drive:
 
-# Production build
-npm run build
+1. Go to **[script.google.com](https://script.google.com)** and create a **New project**.
+2. Copy all code from [`google-apps-script.js`](google-apps-script.js) and paste it into the editor (`Code.gs`).
+3. Click **Deploy** -> **New deployment** -> Select **Web app**.
+   - **Execute as**: `Me`
+   - **Who has access**: `Anyone`
+4. Copy the Web App URL and set it as `NEXT_PUBLIC_GOOGLE_SCRIPT_URL` in `.env.local`.
 
-# Start production server
-npm run start
+---
+
+## 📂 Project Structure
+
+```
+├── google-apps-script.js       # Google Apps Script code for Drive integration
+├── supabase/
+│   └── schema.sql              # Supabase PostgreSQL database tables & policies
+├── src/
+│   ├── app/                    # Next.js App Router pages and API routes
+│   │   ├── api/upload-drive/   # Serverless Google Drive upload endpoint
+│   │   ├── members/[id]/       # Member Passbook & Ledger page
+│   │   ├── layout.tsx
+│   │   └── page.tsx            # Main Dashboard & Member list
+│   ├── components/             # Reusable UI Components
+│   │   ├── MemberFormModal.tsx # Member creation & edit modal with GDrive upload
+│   │   ├── PassbookHeader.tsx  # Member summary card with Drive folder button
+│   │   ├── LedgerTable.tsx     # Transaction ledger table
+│   │   ├── CameraCaptureModal.tsx # Live webcam camera modal
+│   │   └── ...
+│   ├── lib/                    # Utilities & Database client
+│   │   ├── db.ts               # Supabase CRUD operations & local sync
+│   │   ├── googleDrive.ts      # Google Drive upload orchestrator
+│   │   ├── imageCompressor.ts  # Client-side image compression
+│   │   ├── supabaseClient.ts   # Dual Supabase client configuration
+│   │   └── types.ts            # TypeScript interfaces
+└── public/
 ```
 
 ---
 
-## 📝 License
-This project is proprietary software developed for Samity & Loan Management Operations.
+## 📜 License
+
+Distributed under the MIT License. See `LICENSE` for more information.
+

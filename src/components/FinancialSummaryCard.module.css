@@ -1,0 +1,89 @@
+.summaryGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  margin: 1.25rem 0;
+}
+
+.summaryCard {
+  padding: 1.1rem;
+  border-radius: var(--radius-md);
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.labelRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.amount {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: var(--text-primary);
+}
+
+.greenText {
+  color: var(--primary);
+}
+
+.amberText {
+  color: var(--accent-amber);
+}
+
+.blueText {
+  color: var(--accent-blue);
+}
+
+.roseText {
+  color: var(--accent-rose);
+}
+
+.progressBarTrack {
+  height: 6px;
+  background: var(--bg-input);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  margin-top: 0.5rem;
+}
+
+.progressBarFill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--primary) 0%, var(--accent-blue) 100%);
+  border-radius: var(--radius-full);
+  transition: width 0.4s ease;
+}
+
+@media (max-width: 900px) {
+  .summaryGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.85rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .summaryGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.65rem;
+    margin: 1rem 0;
+  }
+  .summaryCard {
+    padding: 0.85rem;
+  }
+  .amount {
+    font-size: 1.15rem;
+  }
+}
+
+@media (max-width: 380px) {
+  .summaryGrid {
+    grid-template-columns: 1fr;
+  }
+}

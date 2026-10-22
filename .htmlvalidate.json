@@ -1,0 +1,19 @@
+{
+  "extends": [
+    "html-validate:recommended"
+  ],
+  "rules": {
+    "doctype-first": "off",
+    "require-sri": "off",
+    "no-inline-style": "off",
+    "element-permitted-content": "off",
+    "element-permitted-occurrences": "off",
+    "attr-case": "off",
+    "void-style": "off",
+    "attribute-boolean-style": "off",
+    "attribute-empty-style": "off",
+    "no-implicit-button-type": "off",
+    "valid-id": "off",
+    "element-required-attributes": "off"
+  }
+}
