@@ -117,6 +117,8 @@ To automatically store member photos & NID images on Google Drive:
 ## 📂 Project Structure
 
 ```
+├── images/
+│   └── image-1.png             # Dashboard & application preview screenshots
 ├── google-apps-script.js       # Google Apps Script code for Drive integration
 ├── supabase/
 │   └── schema.sql              # Supabase PostgreSQL database tables & policies
