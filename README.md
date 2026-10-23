@@ -6,6 +6,12 @@ Designed for non-profit organizations, samity (সমিতি), and micro-credi
 
 ---
 
+## 📸 Preview / ইন্টারফেস প্রিভিউ
+
+![Simple Loan Management System Dashboard Preview](images/image-1.png)
+
+---
+
 ## 🌟 Key Features
 
 ### 👥 1. Comprehensive Member Management
